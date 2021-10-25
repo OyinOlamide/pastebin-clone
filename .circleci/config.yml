@@ -1,16 +1,22 @@
+ 
 version: 2.1
-orbs:
-  node: circleci/node@4.7.0
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
+  run_tests:
+    docker:
+      - image: circleci/node:14
     steps:
-      - checkout
-      - node/install-packages
+      - checkout #alias for git clone\
       - run:
-          command: npm run test
+          name: Install npm dependencies
+          command: |
+            npm install --save
+      - run:
+          name: Run unit tests
+          command: |
+            NODE_ENV=test && npm run test
+ 
 workflows:
-  build-and-test:
+  build_test:
     jobs:
-      - build-and-test
+      - run_tests
+ 
